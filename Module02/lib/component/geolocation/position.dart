@@ -14,5 +14,5 @@ class  Pos {
 
   Pos({required this.name, required this.country, required this.locality, required this.longitude, required this.latitude});
   Pos.empty() : name="", country="", locality="", longitude="", latitude="";
-  Pos.fromJson(Map<String, dynamic> json) : name=json['name'], country=json['country'], locality=json['admin1'], longitude=json["longitude"].toString(), latitude=json["latitude"].toString();
+  Pos.fromJson(Map<String, dynamic> json) : name=json['name']??"", country=json['country']??"", locality=json['admin1']??json['admin2']??json['admin3']??json['admin4']??"", longitude=json["longitude"].toString(), latitude=json["latitude"].toString();
 }

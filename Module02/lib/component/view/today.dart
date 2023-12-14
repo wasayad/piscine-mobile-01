@@ -20,12 +20,20 @@ class _TodayState extends State<Today> {
     var formatter = DateFormat('hh:mm');
     var formatted;
     List<Widget> childs = [];
-    childs.add(Text(widget.weather.dayWeather.location));
-    for (var i = 0; i < 24; i++) {
-      now = DateTime.parse(weather.dayWeather.hours[i]);
-      formatted = formatter.format(now);
-      childs.add(Text(
-              "$formatted ${weather.dayWeather.temperature[i].toString()}°C ${weather.dayWeather.windSpeed[i]}km/h"));
+      if (weather.curWeather.location.contains("Error")) {
+        childs.add(Text(style: const TextStyle(color: Colors.red),weather.curWeather.location));
+      }
+      else {
+        childs.add(Text(weather.curWeather.location));
+    }
+    if (weather.dayWeather.hours.isNotEmpty) {
+      for (var i = 0; i < 24; i++) {
+        now = DateTime.parse(weather.dayWeather.hours[i]);
+        formatted = formatter.format(now);
+        childs.add(Text(
+            "$formatted ${weather.dayWeather.temperature[i]
+                .toString()}°C ${weather.dayWeather.windSpeed[i]}km/h"));
+      }
     }
     return childs;
   }

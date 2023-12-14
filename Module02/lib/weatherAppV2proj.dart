@@ -40,13 +40,13 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  Future<Weather> getWeather(bool shouldRefreshPos) {
-    Future.delayed(const Duration(seconds: 2));
-    return initLocation(shouldRefreshPos),
-  }
+  final Future<Weather> weather = Future<Weather>.delayed(
+    const Duration(seconds: 2),
+        getWeather,
+  );
 
   String localisation = "";
-  late Weather weatherState;
+   Weather weatherState = Weather();
 
   void onWeatherChange(Weather weather) {
     setState(() {
@@ -66,7 +66,7 @@ class _MyHomePageState extends State<MyHomePage> {
       height: MediaQuery.of(context).size.height,
       width: MediaQuery.of(context).size.width,
       child: FutureBuilder<Weather>(
-        future: getWeather(false), // a previously-obtained Future<Weather> or null
+        future: weather, // a previously-obtained Future<Weather> or null
         builder: (BuildContext context, AsyncSnapshot<Weather> snapshot) {
           List<Widget> children;
 
@@ -81,7 +81,9 @@ class _MyHomePageState extends State<MyHomePage> {
                             onChanged: onLocalisationChange),
                         body: (() {
                           if (snapshot.connectionState == ConnectionState.done && snapshot.hasData) {
-                            weatherState = snapshot.data!;
+                            if (weatherState.curWeather.location == "") {
+                              weatherState = snapshot.data!;
+                            }
                             return TabBarView(
                               children: <Widget>[
                                 Currently(weather: weatherState),
